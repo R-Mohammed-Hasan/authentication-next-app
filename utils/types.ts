@@ -10,10 +10,9 @@ export type FormBuilderType = {
 };
 
 export type SupaBaseFormBuilderType = {
-  searchParams?: { message: string };
+  searchParams?: any;
   activeWizard: LOGIN_WIZARD;
-  // signIn: (formData: FormData) => Promise<never>;
-  // signUp: (formData: FormData) => Promise<never>;
+  // handleWizardChange: (wizard: LOGIN_WIZARD) => void;
 };
 
 export enum FormComponentType {

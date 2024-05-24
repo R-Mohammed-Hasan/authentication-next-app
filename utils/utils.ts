@@ -9,3 +9,10 @@ export const getErrMsg = (errCode: string = ""): string => {
   }
   return err;
 };
+
+export const checkPasswordsMatch = (
+  password: string,
+  confirmPassword: string
+): boolean => {
+  return password == confirmPassword;
+};

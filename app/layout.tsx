@@ -32,14 +32,12 @@ export default function RootLayout({
       <body
         id="doc-body"
         className={cn(
-          "min-h-screen font-sans my-10 mx-14 antialiased bg-background text-foreground",
+          "font-sans my-10 mx-14 antialiased bg-background text-foreground",
           fontSans.variable
         )}
       >
         <WrappedNavBar />
-        <main className="min-h-screen flex flex-col items-center">
-          {children}
-        </main>
+        <main className="flex flex-col items-center">{children}</main>
         <Toaster />
       </body>
     </html>

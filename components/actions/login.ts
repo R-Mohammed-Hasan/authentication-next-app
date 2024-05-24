@@ -13,6 +13,7 @@ export const signInAction = async (
   const password = formData.get("password") as string;
   const supabase = createClient();
 
+  // Here we get the session token to be stored for future verification
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
