@@ -8,8 +8,6 @@ import AuthButton from "@/components/AuthButton";
 
 export async function WrappedNavBar() {
   const canInitSupabaseClient = () => {
-    // This function is just for the interactive tutorial.
-    // Feel free to remove it once you have Supabase connected.
     try {
       createClient();
       return true;
@@ -20,9 +18,9 @@ export async function WrappedNavBar() {
 
   const isSupabaseConnected = canInitSupabaseClient();
 
-  const userData = isSupabaseConnected && <AuthButton />;
+  const userData = isSupabaseConnected ? <AuthButton /> : <></>;
 
-  console.log("userData", userData);
+  // console.log("userData", userData);
 
   return <NavBar userData={userData} />;
 }
