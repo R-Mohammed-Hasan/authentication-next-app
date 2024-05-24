@@ -1,19 +1,20 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
-import { createClient } from "./utils/supabase/server";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 
-export async function middleware(request: NextRequest) {
-  const supabase = createClient(); // Here we need to call server side client since client side supabase gives null even if user is logged in
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req, res });
   const {
     data: { session },
     error,
   } = await supabase.auth.getSession();
 
-  // console.log("session", session);
+  console.log("session", session);
   if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
-  return await updateSession(request);
+  return await updateSession(req);
 }
 
 export const config = {

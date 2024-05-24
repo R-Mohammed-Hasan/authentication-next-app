@@ -3,22 +3,15 @@
 import * as React from "react";
 import NavBar from "./static-navbar";
 import { createClient } from "@/utils/supabase/server";
-import { NavigationMenuItem } from "@/components/ui/navigation-menu";
 import AuthButton from "@/components/AuthButton";
 
 export async function WrappedNavBar() {
-  const canInitSupabaseClient = () => {
-    try {
-      createClient();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
+  const supabase = createClient();
+  const { data } = await supabase.auth.getSession();
 
-  const isSupabaseConnected = canInitSupabaseClient();
+  console.log("user session", data);
 
-  const userData = isSupabaseConnected ? <AuthButton /> : <></>;
+  const userData = data ? <AuthButton user={data} /> : <></>;
 
   // console.log("userData", userData);
 

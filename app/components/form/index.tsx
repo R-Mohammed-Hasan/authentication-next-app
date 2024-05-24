@@ -1,21 +1,19 @@
 import { SubmitButton } from "@/app/login/submit-button";
 import { signInAction, signUpAction } from "@/components/actions/login";
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
-import { createClient } from "@/utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import { APIResponseType, SupaBaseFormBuilderType } from "@/utils/types";
-import { getErrMsg } from "@/utils/utils";
 import Link from "next/link";
-import React, { useTransition } from "react";
+import { redirect } from "next/navigation";
+import React from "react";
 
 const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
   searchParams,
   activeWizard,
 }) => {
   // Show loader on isPending event
-  const supabase = createClient();
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
   const [rememberMe, setRememberMe] = React.useState<boolean>(false);
 
   const { toast } = useToast();
@@ -35,6 +33,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         variant: "success",
         description: "You have been signed in...",
       });
+      redirect("/protected");
     }
   };
 
@@ -56,12 +55,12 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
     }
   };
 
-  const signInWithGoogle = async () => {
+  const signIntoGoogle = async () => {
     console.log("google sign in");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "/",
+        redirectTo: "/protected",
       },
     });
     console.log("data", data, error);
@@ -93,7 +92,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
       />
       {activeWizard == "LOG_IN" ? (
         <>
-          <div className="miscellaneous-options-container flex items-center mb-4 justify-between">
+          <div className="miscellaneous-options-container h-6 flex items-center mb-4 justify-between">
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -103,7 +102,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
               />
               <label
                 htmlFor="show-password"
-                className="show-password my-0 ml-2 text-sm cursor-pointer my-4"
+                className="show-password my-0 ml-2 text-sm cursor-pointer"
               >
                 Remember for 30 days
               </label>
@@ -116,7 +115,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
             </Link>
           </div>
           <SubmitButton
-            formAction={(formData) => startTransition(() => signIn(formData))}
+            formAction={(formData) => signIn(formData)}
             className="bg-primary rounded-md px-4 py-2 mb-2 text-textSecondary"
             pendingText="Signing In..."
           >
@@ -124,7 +123,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
           </SubmitButton>
           <Button
             variant={"secondary"}
-            onClick={signInWithGoogle}
+            onClick={signIntoGoogle}
             type="button"
             className="border-border rounded-md px-4 py-2 mb-2 text-textSecondary"
           >
