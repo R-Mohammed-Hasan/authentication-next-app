@@ -1,0 +1,5 @@
+/* Contains reset css to override external library stylings & css bleeds */
+
+nav[aria-label="Main"] > div {
+  width: 100% !important;
+}
