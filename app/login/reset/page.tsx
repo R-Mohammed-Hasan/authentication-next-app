@@ -35,7 +35,7 @@ const ResetPassword = () => {
         className="rounded-md px-4 py-2 bg-inherit border mb-6"
         name="email"
         placeholder="Enter your email"
-        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+        pattern="[a-z0-9._%+\-]+@[a-z0-9.-]+\.[a-z]{2,}$"
         required
       />
       <SubmitButton

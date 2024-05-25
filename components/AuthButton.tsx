@@ -8,6 +8,7 @@ import { Button } from "./ui/button";
 import { useToast } from "./ui/use-toast";
 import ApplicationLoader from "@/app/loading";
 import { User } from "@supabase/supabase-js";
+import { signOut } from "./actions/login";
 
 export default function AuthButton() {
   const { toast } = useToast();
@@ -15,7 +16,7 @@ export default function AuthButton() {
   const [currentUser, setcurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const signOutHandler = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     toast({ title: "Logged off successfully", variant: "success" });
     router.push("/login");
   };

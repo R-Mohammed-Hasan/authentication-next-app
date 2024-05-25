@@ -19,3 +19,5 @@ export const checkPasswordsMatch = (
 ): boolean => {
   return password == confirmPassword;
 };
+
+export const REMEMBER_ME_MAX_LIMIT = 108000;
