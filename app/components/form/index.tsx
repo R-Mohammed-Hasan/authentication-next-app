@@ -84,7 +84,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         className="rounded-md px-4 py-2 bg-inherit border mb-6"
         type="password"
         name="password"
-        // pattern="[A-Za-z0-9]{12,}"
+        pattern="[A-Za-z0-9]{12,}"
         title="Your password should contain 12 characters and be a combination of Uppercase,Lowercase and Numbers"
         placeholder="••••••••"
         required
@@ -108,23 +108,24 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
             </div>
             <Link
               href="login/reset"
-              className="text-sm border-foreground/20 rounded-md px-1 text-primary self-end"
+              className="text-sm border-foreground/20 rounded-md px-1 text-primary hover:underline self-end"
             >
               Forgot password
             </Link>
           </div>
           <SubmitButton
             formAction={(formData) => signIn(formData)}
-            className="bg-primary rounded-md px-4 py-2 mb-2 text-textSecondary"
+            className="bg-primary text-sm rounded-md px-4 py-2 mb-2 text-textSecondary"
             pendingText="Signing In..."
           >
             Sign In
           </SubmitButton>
           <Button
             variant={"outline"}
+            size={"lg"}
             onClick={signIntoGoogle}
             type="button"
-            className="border-border rounded-md px-4 py-2 mb-2"
+            className="border-border rounded-md p-4 mb-2"
           >
             {/* <Icons glyph="google" /> */}
             Sign in with Google
@@ -133,7 +134,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
             Don't have an account?{" "}
             <Link
               href={"/login?activeWizard=SIGN_UP"}
-              className="rounded-md px-1 mb-2 text-primary"
+              className="rounded-md px-1 mb-2 text-primary font-semibold hover:underline"
             >
               Sign Up
             </Link>

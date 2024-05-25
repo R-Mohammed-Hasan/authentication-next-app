@@ -56,7 +56,7 @@ const components: { title: string; href: string; description: string }[] = [
 const NavBar = ({ userData }: NavBarProps) => {
   return (
     <NavigationMenu>
-      <NavigationMenuList>
+      <NavigationMenuList className="w-full" style={{ width: "100%" }}>
         <NavigationMenuItem>
           <Link href="/docs" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -124,6 +124,11 @@ const NavBar = ({ userData }: NavBarProps) => {
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
+      {userData && (
+        <NavigationMenuItem className="items-end !ml-auto">
+          {userData}
+        </NavigationMenuItem>
+      )}
     </NavigationMenu>
   );
 };
