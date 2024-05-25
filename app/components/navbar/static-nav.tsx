@@ -119,17 +119,16 @@ const NavBar = ({ userData }: NavBarProps) => {
         <NavigationMenuItem>
           <Link href="/docs" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Documentation
+              Pricing
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-
-        {userData && (
-          <NavigationMenuItem className="items-end !ml-auto">
-            {userData}
-          </NavigationMenuItem>
-        )}
       </NavigationMenuList>
+      {userData && (
+        <NavigationMenuItem className="items-end !ml-auto">
+          {userData}
+        </NavigationMenuItem>
+      )}
     </NavigationMenu>
   );
 };

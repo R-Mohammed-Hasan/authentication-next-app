@@ -1,5 +1,6 @@
 {
   "private": true,
+  "author": "Mohammed Hasan",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

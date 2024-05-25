@@ -17,8 +17,6 @@ const LoginComponent: React.FC<
     const currentWizard =
       (searchParam.get("activeWizard") as LOGIN_WIZARD) ?? "LOG_IN";
     setActiveWizard(currentWizard);
-    console.log("currentWizard", currentWizard);
-
     handleWizardChange(currentWizard);
   }, [searchParam]);
 
@@ -28,8 +26,6 @@ const LoginComponent: React.FC<
     params.set("activeWizard", wizard);
     window.history.pushState(null, "", `?${params.toString()}`);
   };
-
-  console.log("activeWizard", activeWizard);
 
   return (
     <>

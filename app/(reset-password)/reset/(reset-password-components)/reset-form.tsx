@@ -2,13 +2,14 @@
 
 import { SubmitButton } from "@/app/login/submit-button";
 import { useToast } from "@/components/ui/use-toast";
-import { createClient } from "@/utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 import { checkPasswordsMatch } from "@/utils/utils";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const ResetPasswordForm = () => {
   const { toast } = useToast();
-  const supabase = createClient();
+  const router = useRouter();
   const [showPasswords, setshowPasswords] = React.useState<boolean>(false);
 
   const resetPassword = async (formData: FormData) => {
@@ -25,9 +26,27 @@ const ResetPasswordForm = () => {
       const { data, error } = await supabase.auth.updateUser({
         password: password,
       });
-      if (data) console.log("data", data);
+      if (!error) {
+        toast({
+          title: "Password resetted",
+          variant: "success",
+          description: "Your password has been reset successfully",
+        });
+        router.push("/protected");
+      } else {
+        toast({
+          title: error.message ?? "Some error occurred while processing",
+          description: "Please check your credentials",
+          variant: "destructive",
+        });
+      }
     } catch (err) {
-      console.log("error in resetpassword", err);
+      console.error("error in resetpassword", err);
+      toast({
+        title: "Some error occurred while processing",
+        description: "Please check your credentials",
+        variant: "destructive",
+      });
     }
   };
 

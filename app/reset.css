@@ -1,5 +1,7 @@
 /* Contains reset css to override external library stylings & css bleeds */
 
 nav[aria-label="Main"] > div {
-  width: 100% !important;
+  width: 40% !important;
+  display: flex;
+  justify-content: space-between;
 }

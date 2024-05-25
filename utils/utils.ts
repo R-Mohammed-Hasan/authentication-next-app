@@ -4,6 +4,9 @@ export const getErrMsg = (errCode: string = ""): string => {
     case "weak_password":
       err = "Weak password. Please choose a strong password";
       break;
+    case "over_email_send_rate_limit":
+      err = "Too many requests. Please try again after sometime";
+      break;
     default:
       break;
   }

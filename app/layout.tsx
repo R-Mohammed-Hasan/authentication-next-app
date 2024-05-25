@@ -6,6 +6,7 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { WrappedNavBar } from "./components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
+// import { AuthProvider } from "./../context/auth-provider";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -28,8 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    // <AuthProvider>
     <html lang="en" className={GeistSans.className}>
       <body
+        // Implement dark theme using this id
         id="doc-body"
         className={cn(
           "font-sans my-10 mx-14 antialiased bg-background text-foreground",
@@ -41,5 +44,6 @@ export default function RootLayout({
         <Toaster />
       </body>
     </html>
+    // </AuthProvider>
   );
 }

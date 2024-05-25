@@ -2,30 +2,27 @@
 
 import React from "react";
 import { SubmitButton } from "../submit-button";
-import { createClient } from "@/utils/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/utils/supabase/client";
 
 const ResetPassword = () => {
-  const supabase = createClient();
   const { toast } = useToast();
 
   const resetPassword = async (formData: FormData) => {
     try {
-      console.log("formData", formData);
-      const { data, error } = await supabase.auth.resetPasswordForEmail(
+      const { error } = await supabase.auth.resetPasswordForEmail(
         formData.get("email") as string,
         {
           redirectTo: `${location.origin}/reset`,
         }
       );
-      console.log("data", data, error);
       if (!error) {
         toast({ title: "Mail sent successfully", variant: "success" });
       } else {
         toast({ title: "Unsuccessful...!", variant: "destructive" });
       }
     } catch (err) {
-      console.log("errr", err);
+      console.error("error =====> ", err);
       toast({ title: "Mail sent successfully", variant: "destructive" });
     }
   };

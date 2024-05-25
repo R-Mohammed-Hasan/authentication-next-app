@@ -1,28 +1,29 @@
 import { SubmitButton } from "@/app/login/submit-button";
-import { signInAction, signUpAction } from "@/components/actions/login";
+import {
+  signInAction,
+  signInWithGoogle,
+  signUpAction,
+} from "@/components/actions/login";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
-import { createClient } from "@/utils/supabase/client";
 import { APIResponseType, SupaBaseFormBuilderType } from "@/utils/types";
-import { getErrMsg } from "@/utils/utils";
 import Link from "next/link";
-import React, { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
   searchParams,
   activeWizard,
 }) => {
   // Show loader on isPending event
-  const supabase = createClient();
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
   const [rememberMe, setRememberMe] = React.useState<boolean>(false);
-
+  const router = useRouter();
   const { toast } = useToast();
 
   const signIn = async (formData: FormData) => {
     const res: APIResponseType = await signInAction(formData);
-    console.log("response", res);
     if (!res.isSuccess) {
       toast({
         title: res.errorMsg || "Some error occurred while processing",
@@ -30,17 +31,19 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         variant: "destructive",
       });
     } else {
-      toast({
-        title: "Success !",
-        variant: "success",
-        description: "You have been signed in...",
-      });
+      setTimeout(() => {
+        toast({
+          title: "Success !",
+          variant: "success",
+          description: "You have been signed in...",
+        });
+      }, 500);
+      router.push("/protected");
     }
   };
 
   const signUp = async (formData: FormData) => {
     const res = await signUpAction(formData);
-    console.log("response", res);
     if (!res.isSuccess) {
       toast({
         title: res.errorMsg || "Some error occurred while processing",
@@ -49,22 +52,15 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
       });
     } else {
       toast({
-        title: "Success !",
+        title: "Success! Please confirm you email",
         variant: "success",
-        description: "You have been signed up...",
+        description: "Check you inbox & activate your account...",
       });
     }
   };
 
-  const signInWithGoogle = async () => {
-    console.log("google sign in");
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "/",
-      },
-    });
-    console.log("data", data, error);
+  const signIntoGoogle = async () => {
+    await signInWithGoogle();
   };
 
   return (
@@ -93,7 +89,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
       />
       {activeWizard == "LOG_IN" ? (
         <>
-          <div className="miscellaneous-options-container flex items-center mb-4 justify-between">
+          <div className="miscellaneous-options-container h-6 flex items-center mb-4 justify-between">
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -103,39 +99,40 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
               />
               <label
                 htmlFor="show-password"
-                className="show-password my-0 ml-2 text-sm cursor-pointer my-4"
+                className="show-password my-0 ml-2 text-sm cursor-pointer"
               >
                 Remember for 30 days
               </label>
             </div>
             <Link
               href="login/reset"
-              className="text-sm border-foreground/20 rounded-md px-1 text-primary self-end"
+              className="text-sm border-foreground/20 rounded-md px-1 text-primary hover:underline self-end"
             >
               Forgot password
             </Link>
           </div>
           <SubmitButton
-            formAction={(formData) => startTransition(() => signIn(formData))}
-            className="bg-primary rounded-md px-4 py-2 mb-2 text-textSecondary"
+            formAction={(formData) => signIn(formData)}
+            className="bg-primary text-sm rounded-md px-4 py-2 mb-2 text-textSecondary"
             pendingText="Signing In..."
           >
             Sign In
           </SubmitButton>
           <Button
-            variant={"secondary"}
-            onClick={signInWithGoogle}
+            variant={"outline"}
+            size={"lg"}
+            onClick={signIntoGoogle}
             type="button"
-            className="border-border rounded-md px-4 py-2 mb-2 text-textSecondary"
+            className="border-border flex items-center justify-center gap-2 relative rounded-md p-4 mb-2"
           >
-            {/* <Icons glyph="google" /> */}
+            <Icons glyph="google" />
             Sign in with Google
           </Button>
           <div className="signup-container text-sm text-center mt-6">
             Don't have an account?{" "}
             <Link
               href={"/login?activeWizard=SIGN_UP"}
-              className="rounded-md px-1 mb-2 text-primary"
+              className="rounded-md px-1 mb-2 text-primary font-semibold hover:underline"
             >
               Sign Up
             </Link>
@@ -150,7 +147,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         </SubmitButton>
       )}
       {searchParams?.message && (
-        <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+        <p className="mt-4 p-4  bg-destructive text-textSecondary rounded text-center">
           {searchParams.message}
         </p>
       )}
