@@ -1,31 +1,29 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { updateSession } from "@/utils/supabase/middleware";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import { supabase } from "./utils/supabase/client";
+import { NextResponse, type NextRequest } from "next/server";
+import { useToast } from "./components/ui/use-toast";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
   const {
     data: { session },
-    error,
   } = await supabase.auth.getSession();
-  const { data } = await supabase.auth.getSession();
-  debugger;
 
-  console.log(
-    "session",
-    session,
-    { data },
-    req?.nextUrl?.search,
-    req?.nextUrl?.searchParams
-  );
+  // console.log(
+  //   "session",
+  //   session,
+  //   { data },
+  //   req?.nextUrl?.search,
+  //   req?.nextUrl?.searchParams
+  // );
   // Exluding Google OAuth URL containing "code" param
   if (req?.nextUrl?.search?.includes("code")) {
     return res;
   }
   if (!session) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(
+      new URL("/login?message=You need to login...!", req.url)
+    );
   }
   return res;
   // return await updateSession(req);

@@ -5,6 +5,7 @@ import {
   signUpAction,
 } from "@/components/actions/login";
 import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { APIResponseType, SupaBaseFormBuilderType } from "@/utils/types";
 import Link from "next/link";
@@ -19,12 +20,10 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
   // const [isPending, startTransition] = useTransition();
   const [rememberMe, setRememberMe] = React.useState<boolean>(false);
   const router = useRouter();
-
   const { toast } = useToast();
 
   const signIn = async (formData: FormData) => {
     const res: APIResponseType = await signInAction(formData);
-    console.log("response", res);
     if (!res.isSuccess) {
       toast({
         title: res.errorMsg || "Some error occurred while processing",
@@ -45,7 +44,6 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
 
   const signUp = async (formData: FormData) => {
     const res = await signUpAction(formData);
-    console.log("response", res);
     if (!res.isSuccess) {
       toast({
         title: res.errorMsg || "Some error occurred while processing",
@@ -125,9 +123,9 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
             size={"lg"}
             onClick={signIntoGoogle}
             type="button"
-            className="border-border rounded-md p-4 mb-2"
+            className="border-border flex items-center justify-center gap-2 relative rounded-md p-4 mb-2"
           >
-            {/* <Icons glyph="google" /> */}
+            <Icons glyph="google" />
             Sign in with Google
           </Button>
           <div className="signup-container text-sm text-center mt-6">
@@ -149,7 +147,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         </SubmitButton>
       )}
       {searchParams?.message && (
-        <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+        <p className="mt-4 p-4  bg-destructive text-textSecondary rounded text-center">
           {searchParams.message}
         </p>
       )}

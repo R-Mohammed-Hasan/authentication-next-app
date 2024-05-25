@@ -1,5 +1,11 @@
 import React from "react";
 import "./../../login/login.scss";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Basic Authentication System | Reset password",
+  description: "Reset password page",
+};
 
 const ResetPasswordPageLayout = ({
   children,

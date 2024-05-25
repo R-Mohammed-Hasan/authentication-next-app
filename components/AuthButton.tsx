@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { useToast } from "./ui/use-toast";
+import ApplicationLoader from "@/app/loading";
+import { User } from "@supabase/supabase-js";
 
 export default function AuthButton() {
   const { toast } = useToast();
   const router = useRouter();
-  const [currentUser, setcurrentUser] = useState<any>(null);
+  const [currentUser, setcurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const signOutHandler = async () => {
     await supabase.auth.signOut();
@@ -23,12 +25,12 @@ export default function AuthButton() {
       const {
         data: { user: user2 },
       } = await supabase.auth.getUser();
-      console.log("user2", user2);
       setcurrentUser(user2);
       setIsLoading(false);
     };
     // Run getUser once on mount to get the current user
     getUser();
+
     // auth state change listener
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -41,20 +43,19 @@ export default function AuthButton() {
     };
   }, [supabase.auth]);
 
-  console.log("currentUser", currentUser);
   const user = currentUser;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <ApplicationLoader />;
   }
 
   return user ? (
     <div className="flex items-center gap-4 text-sm">
       Hey, {user.email}!
       <form action={signOutHandler}>
-        <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
+        <Button variant={"default"} className="py-2 px-4 rounded-md">
           Logout
-        </button>
+        </Button>
       </form>
     </div>
   ) : (

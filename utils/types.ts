@@ -10,7 +10,7 @@ export type FormBuilderType = {
 };
 
 export type SupaBaseFormBuilderType = {
-  searchParams?: any;
+  searchParams?: Record<string, string>;
   activeWizard: LOGIN_WIZARD;
   // handleWizardChange: (wizard: LOGIN_WIZARD) => void;
 };

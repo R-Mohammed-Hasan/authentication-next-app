@@ -10,7 +10,6 @@ import React from "react";
 const ResetPasswordForm = () => {
   const { toast } = useToast();
   const router = useRouter();
-
   const [showPasswords, setshowPasswords] = React.useState<boolean>(false);
 
   const resetPassword = async (formData: FormData) => {
@@ -42,7 +41,7 @@ const ResetPasswordForm = () => {
         });
       }
     } catch (err) {
-      console.log("error in resetpassword", err);
+      console.error("error in resetpassword", err);
       toast({
         title: "Some error occurred while processing",
         description: "Please check your credentials",

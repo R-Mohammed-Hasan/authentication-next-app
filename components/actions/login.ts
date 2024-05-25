@@ -14,8 +14,6 @@ export const signInAction = async (
     email,
     password,
   });
-  console.log("error", error);
-
   if (error) {
     return { isSuccess: false, errorMsg: getErrMsg(error.code) };
   }
@@ -35,7 +33,6 @@ export const signUpAction = async (
       emailRedirectTo: `${location.origin}/auth/callback`,
     },
   });
-  console.log("error", error);
   if (error) {
     return { isSuccess: false, errorMsg: getErrMsg(error.code) };
   }
@@ -43,16 +40,12 @@ export const signUpAction = async (
 };
 
 export const signInWithGoogle = async (): Promise<OAuthResponse> => {
-  console.log("signInWithGoogle", signInWithGoogle);
-
   const res = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
       redirectTo: `${location.origin}/protected`,
     },
   });
-  console.log("res", res);
-
   return res;
 };
 
