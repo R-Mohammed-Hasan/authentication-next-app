@@ -1,11 +1,14 @@
 import { SubmitButton } from "@/app/login/submit-button";
-import { signInAction, signUpAction } from "@/components/actions/login";
+import {
+  signInAction,
+  signInWithGoogle,
+  signUpAction,
+} from "@/components/actions/login";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/utils/supabase/client";
 import { APIResponseType, SupaBaseFormBuilderType } from "@/utils/types";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
@@ -15,6 +18,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
   // Show loader on isPending event
   // const [isPending, startTransition] = useTransition();
   const [rememberMe, setRememberMe] = React.useState<boolean>(false);
+  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -28,12 +32,14 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         variant: "destructive",
       });
     } else {
-      toast({
-        title: "Success !",
-        variant: "success",
-        description: "You have been signed in...",
-      });
-      redirect("/protected");
+      setTimeout(() => {
+        toast({
+          title: "Success !",
+          variant: "success",
+          description: "You have been signed in...",
+        });
+      }, 500);
+      router.push("/protected");
     }
   };
 
@@ -48,22 +54,15 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
       });
     } else {
       toast({
-        title: "Success !",
+        title: "Success! Please confirm you email",
         variant: "success",
-        description: "You have been signed up...",
+        description: "Check you inbox & activate your account...",
       });
     }
   };
 
   const signIntoGoogle = async () => {
-    console.log("google sign in");
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "/protected",
-      },
-    });
-    console.log("data", data, error);
+    await signInWithGoogle();
   };
 
   return (
@@ -85,7 +84,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         className="rounded-md px-4 py-2 bg-inherit border mb-6"
         type="password"
         name="password"
-        pattern="[A-Za-z0-9]{12,}"
+        // pattern="[A-Za-z0-9]{12,}"
         title="Your password should contain 12 characters and be a combination of Uppercase,Lowercase and Numbers"
         placeholder="••••••••"
         required
@@ -122,10 +121,10 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
             Sign In
           </SubmitButton>
           <Button
-            variant={"secondary"}
+            variant={"outline"}
             onClick={signIntoGoogle}
             type="button"
-            className="border-border rounded-md px-4 py-2 mb-2 text-textSecondary"
+            className="border-border rounded-md px-4 py-2 mb-2"
           >
             {/* <Icons glyph="google" /> */}
             Sign in with Google

@@ -1,7 +1,7 @@
 import { supabase } from "@/utils/supabase/client";
 import { APIResponseType } from "@/utils/types";
 import { getErrMsg } from "@/utils/utils";
-import { AuthResponse, OAuthResponse } from "@supabase/supabase-js";
+import { AuthError, AuthResponse, OAuthResponse } from "@supabase/supabase-js";
 
 export const signInAction = async (
   formData: FormData
@@ -43,6 +43,8 @@ export const signUpAction = async (
 };
 
 export const signInWithGoogle = async (): Promise<OAuthResponse> => {
+  console.log("signInWithGoogle", signInWithGoogle);
+
   const res = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -52,4 +54,9 @@ export const signInWithGoogle = async (): Promise<OAuthResponse> => {
   console.log("res", res);
 
   return res;
+};
+
+export const signOut = async (): Promise<AuthError | null> => {
+  const { error } = await supabase.auth.signOut();
+  return error;
 };

@@ -2,32 +2,56 @@
 
 import { supabase } from "@/utils/supabase/client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { useState } from "react";
-import React from "react";
+import { useToast } from "./ui/use-toast";
 
 export default function AuthButton() {
+  const { toast } = useToast();
+  const router = useRouter();
   const [currentUser, setcurrentUser] = useState<any>(null);
-  const signOut = async () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const signOutHandler = async () => {
     await supabase.auth.signOut();
-    return redirect("/login");
+    toast({ title: "Logged off successfully", variant: "success" });
+    router.push("/login");
   };
 
   React.useEffect(() => {
     const getUser = async () => {
-      const user2 = await supabase.auth.getSession();
+      const {
+        data: { user: user2 },
+      } = await supabase.auth.getUser();
+      console.log("user2", user2);
       setcurrentUser(user2);
+      setIsLoading(false);
     };
+    // Run getUser once on mount to get the current user
     getUser();
-  }, []);
+    // auth state change listener
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log(`Supabase auth event: ${event}`);
+        getUser();
+      }
+    );
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [supabase.auth]);
 
   console.log("currentUser", currentUser);
   const user = currentUser;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return user ? (
     <div className="flex items-center gap-4 text-sm">
       Hey, {user.email}!
-      <form action={signOut}>
+      <form action={signOutHandler}>
         <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
           Logout
         </button>

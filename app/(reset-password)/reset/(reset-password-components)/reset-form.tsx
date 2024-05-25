@@ -4,10 +4,12 @@ import { SubmitButton } from "@/app/login/submit-button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/utils/supabase/client";
 import { checkPasswordsMatch } from "@/utils/utils";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const ResetPasswordForm = () => {
   const { toast } = useToast();
+  const router = useRouter();
 
   const [showPasswords, setshowPasswords] = React.useState<boolean>(false);
 
@@ -31,6 +33,7 @@ const ResetPasswordForm = () => {
           variant: "success",
           description: "Your password has been reset successfully",
         });
+        router.push("/protected");
       } else {
         toast({
           title: error.message ?? "Some error occurred while processing",

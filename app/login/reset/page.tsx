@@ -2,11 +2,10 @@
 
 import React from "react";
 import { SubmitButton } from "../submit-button";
-import { createClient } from "@/utils/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/utils/supabase/client";
 
 const ResetPassword = () => {
-  const supabase = createClient();
   const { toast } = useToast();
 
   const resetPassword = async (formData: FormData) => {

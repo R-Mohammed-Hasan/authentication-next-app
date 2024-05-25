@@ -1,6 +1,6 @@
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse, type NextRequest } from "next/server";
-import { supabase } from "./client";
+import { createClient } from "./server";
 
 export const updateSession = async (req: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
@@ -13,7 +13,7 @@ export const updateSession = async (req: NextRequest) => {
       },
     });
 
-    // const supabase = createMiddlewareClient({ req, res });
+    const supabase = createClient();
 
     // This will refresh session if expired - required for Server Components
     // https://supabase.com/docs/guides/auth/server-side/nextjs
