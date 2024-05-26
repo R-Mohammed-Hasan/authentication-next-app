@@ -7,6 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/utils/supabase/client";
 import { APIResponseType, SupaBaseFormBuilderType } from "@/utils/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,7 +24,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
   const { toast } = useToast();
 
   const signIn = async (formData: FormData) => {
-    const res: APIResponseType = await signInAction(formData);
+    const res: APIResponseType = await signInAction(formData, rememberMe);
     if (!res.isSuccess) {
       toast({
         title: res.errorMsg || "Some error occurred while processing",
@@ -63,6 +64,13 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
     await signInWithGoogle();
   };
 
+  const getSession = async () => {
+    const session = await supabase.auth.getSession();
+    console.log("session", session);
+  };
+
+  getSession();
+
   return (
     <form className="animate-in flex flex-col w-full justify-center gap-1 text-foreground">
       <label className="text-sm" htmlFor="email">
@@ -72,7 +80,7 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
         className="rounded-md px-4 py-2 bg-inherit border mb-6"
         name="email"
         placeholder="Enter your email"
-        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
         required
       />
       <label className="text-sm" htmlFor="password">
@@ -94,19 +102,19 @@ const FormBuilder: React.FC<SupaBaseFormBuilderType> = ({
               <input
                 type="checkbox"
                 value={String(rememberMe)}
-                id="show-password"
+                id="remember-me"
                 onChange={() => setRememberMe((prev) => !prev)}
               />
               <label
-                htmlFor="show-password"
-                className="show-password my-0 ml-2 text-sm cursor-pointer"
+                htmlFor="remember-me"
+                className="remember-me my-0 ml-2 text-sm cursor-pointer"
               >
                 Remember for 30 days
               </label>
             </div>
             <Link
               href="login/reset"
-              className="text-sm border-foreground/20 rounded-md px-1 text-primary hover:underline self-end"
+              className="text-sm border-foreground/20 rounded-md h-full text-primary hover:underline self-end"
             >
               Forgot password
             </Link>
